@@ -1,0 +1,28 @@
+#!/bin/bash
+#Zip all files into a backup copy with $NUM as the version number
+
+#Set drive letter depending on machine name:
+if [ `hostname` = "moses" ] ; then L=L; W=C; fi
+if [ `hostname` = "AMOS" ] ; then L=C; W=W; fi
+echo L=$L W=$W
+
+tail -10 readme
+echo Enter archive number
+read NUM
+echo $NUM >> readme
+
+vi readme
+rm -f old/bak.zip
+mv old/$NUM.zip old/bak.zip
+ls -lt > ll.tmp
+
+zip old/$NUM ll.tmp arc notes readme *.py orig manual go* doc_to_raw
+
+#Save a version in junk on Moses & roc
+#HOST=`hostname`
+#FOLDER=`pwd|sed 's/\//_/g' | sed "s/^/$HOST/" | sed 's/cygdrive_//'`
+#cp old/$NUM.zip $W:/arcs/$FOLDER.zip
+#cp old/$NUM.zip $L:/arcs/$FOLDER.zip
+
+rm ll.tmp
+tail -3 readme

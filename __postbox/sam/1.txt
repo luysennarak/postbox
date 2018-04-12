@@ -1,0 +1,16 @@
+<SavedConversation>
+	<Item type="text">The CaptionCall Service will begin momentarily. </Item>
+	<Item type="br"/>
+	<Item type="text">Your call assistant is 1634793a </Item>
+	<Item type="br"/>
+	<Item type="text">Your call will now be captioned </Item>
+	<Item type="br"/>
+	<Item type="text">· · (New voice.) </Item>
+	<Item type="br"/>
+	<Item type="text">Oh hi there, pumpkin. Oh, I know. I was thinking about bringing some tapioca pudding to our big scrapbooking event this weekend. Oh, you know, I&apos;ve gotten lots of pictures of acute grandkids, and I&apos;m just so excited to have our big scrapbooking party. Oh, you know I never give up my tapioca pudding recipe. Oh yeah. I will be taking that to my grave. You know, every holiday party. All the relatives want to get at my tapioca pudding, and I say absolutely not. </Item>
+	<Item type="br"/>
+	<Item type="text">Oh, why thank you. I&apos;m glad everybody knows that I have the best tapioca pudding (Laughs.) in the area. Oh yeah. Still, he&apos;s going to… Yeah. You know how the men get around this time. · Oh yeah. Hopefully they&apos;ll bring back some good fish. · All you know I would never like to go out there. It&apos;s just too darn cold. Oh, you don&apos;t say. Well you know, Linda, she just, she&apos;s just a little gossip lately. Oh, I know. Well hopefully she comes to the scrap booking party and gets along. · Oh well, I&apos;m sorry to hear that. Well, you give her your regards from us. Yeah, you let them know that they are always welcome over here if they want. · Oh yeah. I feel you. I feel you. We&apos;ve got plenty to do. I know, I haven&apos;t even started decorating yet. Okay. Well, it was good catching up with you, I will see you this weekend. Yeah, make sure to bring all your scrapbooking stuff. Okay. Talk to you later. Bye-bye. · · · · Captioning has ended. </Item>
+	<Item type="br"/>
+	<Item type="line"/>
+	<Item type="stext">Captioning Ended / 12:00 pm </Item>
+</SavedConversation>

@@ -1,0 +1,7 @@
+I'm attaching a set of real transcripts from 10 human transcribers. Since this reflects the type of text we're likely to see in our real service, you may be interested in testing your code against it.
+
+You will notice the files need some formatting since the text is still in the form we receive it in from our production environment. I don't have the truth transcript, but I've attached the original recording.
+
+Thank you,
+
+David

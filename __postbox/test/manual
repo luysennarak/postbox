@@ -1,0 +1,72 @@
+/home/DThomson2/sclite/sctk-2.4.10/bin/rover \
+-h asr13 ctm \
+-h asr16 ctm \
+-h asr0 ctm \
+-h asr1 ctm \
+-h asr2 ctm \
+-h asr3 ctm \
+-h asr4 ctm \
+-h asr5 ctm \
+-h asr6 ctm \
+-h asr7 ctm \
+-h asr8 ctm \
+-h asr9 ctm \
+-h asr10 ctm \
+-h asr11 ctm \
+-h asr12 ctm \
+-h asr14 ctm \
+-h asr15 ctm \
+-h asr17 ctm \
+-h asr18 ctm \
+-h asr19 ctm \
+-h asr20 ctm \
+-h asr21 ctm \
+-h asr22 ctm \
+-h asr23 ctm \
+-h asr24 ctm \
+-h asr25 ctm \
+-h asr26 ctm \
+-h asr27 ctm \
+-h asr28 ctm \
+-h asr29 ctm \
+-m meth1 -o out;
+cat out
+exit
+
+CORP+DThomson2@CAP-L-EXE-DTHO ~/sclite/ca
+$ ./rover.py orig
+Hypothesis 0 = -821 really good news
+Hypothesis 1 = -263 some -236 news today
+Hypothesis 2 = Had 223 561 -962 -806 good today
+Hypothesis 3 = -169 some good 629 75 news
+Hypothesis 4 = some 349 238 really news
+Hypothesis 5 = Had 295 -684 news today
+Hypothesis 6 = Had really good news
+Hypothesis 7 = Had -507 621 really 609 today
+Hypothesis 8 = 359 932 Had -285 really -579 news today
+Hypothesis 9 = 981 -798 good news 778 today
+Hypothesis 10 = Had 254 really news 209
+Hypothesis 11 = Had 283 really 976 412 news today
+Hypothesis 12 = Had -423 good news today
+Hypothesis 13 = Had some 213 -65 news -383 today
+Hypothesis 14 = 207 Had 375 -756 -559 news today
+Hypothesis 15 = some -718 good 78 -529 -150
+Hypothesis 16 = Had some really good news -623
+Hypothesis 17 = -46 some really good 652 news today
+Hypothesis 18 = 99 Had really 811 good 257 today
+Hypothesis 19 = some really -726 today
+Hypothesis 20 = -976 good 725 news -563
+Hypothesis 21 = -237 some good 567 673 today
+Hypothesis 22 = good 512 news today
+Hypothesis 23 = 778 Had some 110 -149 good -897 today
+Hypothesis 24 = -200 some 59 good 518 -686 today
+Hypothesis 25 = Had really good -364
+Hypothesis 26 = Had -793 really -574
+Hypothesis 27 = -288 Had some really news today
+Hypothesis 28 = Had really -497 -25 658 -271
+Hypothesis 29 = Had really good
+orig a 0.000 0.000 really -1.000000
+orig a 0.000 0.000 good -1.000000
+orig a 0.000 0.000 news -1.000000
+orig a 0.000 0.000 today -1.000000
+
