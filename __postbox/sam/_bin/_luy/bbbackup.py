@@ -28,7 +28,7 @@ from keras.layers import Dense
 from pyAudioAnalysis import audioFeatureExtraction as aFE
 from pyAudioAnalysis import audioBasicIO as aIO
 
-fs=44100
+fs=16000
 #MAX_INT = 32768.0
 lowpass = 300 # Remove lower frequencies.
 highpass = 8000 # Remove higher frequencies.
@@ -143,9 +143,9 @@ def newFeatures(Fs, signal):
     Feats = aFE.stFeatureExtraction(x, Fs, win, step)
 
     # saveFeats(Feats)
-    #Feats = np.transpose(Feats[6:21, :])
-    ff0 = Feats[6:21, :]
-    Feats = np.reshape(ff0,(len(ff0[0]), 15))
+    Feats = np.transpose(Feats[8:21, :])
+    #ff0 = Feats[8:21, :]
+    #Feats = np.reshape(ff0,(len(ff0[0]), 14))
 
     newFeat = []
     for row in range(len(Feats)):
@@ -167,7 +167,7 @@ def doafter5():
     li=[]
     
     timeout=time.time()+20
-    for f in range(0,int(44100/8192*5)):
+    for f in range(0,int(fs/8192*2)):
         Livesound=livesound.read(8192)
         li.append(Livesound)
         
@@ -179,12 +179,14 @@ def doafter5():
     waves.writeframes(b''.join(li))
     waves.close()
 
+    l.terminate()
+
     fs1 = 16000
     livesignal,fsd=librosa.load('rec.wav', sr=fs1) #sf.read('rec.wav')
 
     #noNoiseSignal = removeNoise(livesignal, fs)
 
-    #loudSignal = Loudness(livesignal)
+    #livesignal = Loudness(livesignal)
 
 
     newdata=[]
@@ -200,20 +202,19 @@ def doafter5():
     #newdata.append(f[0])
     #newdata.append(f[1])
 
-    newdata=np.reshape(newdata,(1,15))
+    newdata=np.reshape(newdata,(1,13))
 
    
     soundclass=int(mymodel.predict_classes(newdata))
    
-        
-    threading.Timer(5.0,doafter5).start()
     #if soundclass==1:
     #    os.system('python /home/pi/Downloads/gsmsendsms.py')
     print('Detecting......')
     if soundclass == 1:
         print("baby is crying now.")
-    l.terminate()
     os.remove('rec.wav')
+
+    threading.Timer(2.0, doafter5).start()
 
 if __name__ == '__main__':
     doafter5()

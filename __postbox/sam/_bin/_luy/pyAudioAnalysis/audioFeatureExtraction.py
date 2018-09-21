@@ -1045,6 +1045,8 @@ def stFeatureExtraction(signal, Fs, Win, Step):
         chromaNames, chromaF = stChromaFeatures(X, Fs, nChroma, nFreqsPerChroma)
         curFV[numOfTimeSpectralFeatures + nceps: numOfTimeSpectralFeatures + nceps + numOfChromaFeatures - 1] = chromaF
         curFV[numOfTimeSpectralFeatures + nceps + numOfChromaFeatures - 1] = chromaF.std()
+
+        curFV[8] = curFV[7]
         stFeatures.append(curFV)
         # delta features
         '''

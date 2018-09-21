@@ -87,16 +87,21 @@ def VAD(frate, signal):
     energy = stFeats[1, :]
     eth = (np.max(energy) + np.min(energy))/2
 
-    return signal
+    newSignal = []
+    for sig in signal:
+        if sig > eth: newSignal.append(sig)
+
+    return newSignal
 
 
-def newFeatures(inFile):
+def newFeatures(inFile, isVAD):
     # read audio data from file
     #[Fs, x] = aIO.readAudioFile(inFile)
     x, Fs = librosa.load(inFile, sr=16000) #sf.read(inFile)
 
     # VAD
-    x = VAD(Fs, x)
+    if isVAD:
+        x = VAD(Fs, x)
 
     # window and overlap size
     win = int(0.025 * Fs)
@@ -106,7 +111,7 @@ def newFeatures(inFile):
     Feats = aFE.stFeatureExtraction(x, Fs, win, step)
 
     # saveFeats(Feats)
-    Feats = np.transpose(Feats[6:21, :])
+    Feats = np.transpose(Feats[8:21, :])
 
     newFeat = []
     for row in range(len(Feats)):
@@ -124,17 +129,18 @@ def Mfcc(audiofile):
 
 # In[53]:
 
-lengthofFeat = 16
+lengthofFeat = 14
 dim = (len(baby_cry+nonbabycry),lengthofFeat)
 mydata = np.zeros(dim)
 
 
 # In[69]:
-
+# crying class
 for i in range(0,len(baby_cry)):
     data=[]
+    print("read %s..." % baby_cry[i])
     #mfc=Mfcc(baby_cry[i])
-    feat = newFeatures(baby_cry[i])
+    feat = newFeatures(baby_cry[i], True)
     feat1 = np.mean(feat, axis=0)
     for j in feat1:
         data.append(j)
@@ -142,10 +148,12 @@ for i in range(0,len(baby_cry)):
     mydata[i,:] = data
 
 
+# other class
 all=baby_cry+nonbabycry
 for i in range(len(baby_cry)-1,len(all)-1):
      data=[]
-     feat = newFeatures(all[i])
+     print("read %s..." % all[i])
+     feat = newFeatures(all[i], False)
      feat1 = np.mean(feat, axis=0)
      for j in feat1:
          data.append(j)
@@ -155,14 +163,15 @@ for i in range(len(baby_cry)-1,len(all)-1):
 
 # In[82]:
 
-input=mydata[:,0:15]
-output=mydata[:,15]
+input=mydata[:,0:13]
+output=mydata[:,13]
 
 
 # In[83]:
 
+print("start training...")
 mymodel=Sequential()
-mymodel.add(Dense(32, input_dim = 15, init='uniform', activation ='relu'))
+mymodel.add(Dense(32, input_dim = 13, init='uniform', activation ='relu'))
 mymodel.add(Dense(16,init='uniform', activation='relu'))
 mymodel.add(Dense(1, init='uniform', activation='sigmoid'))
 
@@ -174,16 +183,16 @@ mymodel.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy']
 
 # In[85]:
 
-mymodel.fit(input,output, epochs=100, batch_size=40, verbose=2)
+mymodel.fit(input,output, epochs=500, batch_size=20, verbose=2)
 
 
 # In[86]:
-
+print("evaluate...")
 myrmse=mymodel.evaluate(input,output)
 
 
 # In[87]:
-
+print("save json and model...")
 with open('hmodel.json','w') as f:
     f.write(mymodel.to_json())
 
@@ -192,3 +201,4 @@ with open('hmodel.json','w') as f:
 
 mymodel.save_weights("hmodelweight.h5")
 
+print("successfully finished.")
