@@ -31,7 +31,6 @@ from keras.layers import LSTM
 from sklearn.model_selection import train_test_split
 #from sklearn.preprocessing import StandardbScaler
 from pyAudioAnalysis import audioFeatureExtraction as aFE
-from pyAudioAnalysis import audioBasicIO as aIO
 
 # In[33]:
 
@@ -81,27 +80,10 @@ nonbabycry=baby_silence+baby_noise+baby_laugh
 
 # In[52]:
 
-def VAD(frate, signal):
-    win = int(0.025 * frate)
-    stFeats = aFE.stFeatureExtraction(signal, frate, win, win)
-    energy = stFeats[1, :]
-    eth = (np.max(energy) + np.min(energy))/2
-
-    newSignal = []
-    for sig in signal:
-        if sig > eth: newSignal.append(sig)
-
-    return newSignal
-
-
 def newFeatures(inFile, isVAD):
     # read audio data from file
     #[Fs, x] = aIO.readAudioFile(inFile)
     x, Fs = librosa.load(inFile, sr=16000) #sf.read(inFile)
-
-    # VAD
-    if isVAD:
-        x = VAD(Fs, x)
 
     # window and overlap size
     win = int(0.025 * Fs)
@@ -109,6 +91,13 @@ def newFeatures(inFile, isVAD):
 
     # get short-time features
     Feats = aFE.stFeatureExtraction(x, Fs, win, step)
+
+    if isVAD:
+        energy = Feats[1]
+        thv = energy.mean() * 0.1
+        i_speechs = np.where(energy > thv)[0]
+        Feats = Feats[:, i_speechs]
+
 
     # saveFeats(Feats)
     Feats = np.transpose(Feats[8:21, :])
@@ -120,8 +109,7 @@ def newFeatures(inFile, isVAD):
     return newFeat
 
 def Mfcc(audiofile):
-    p_s,r=sf.read(audiofile)
-    s = VAD(r, p_s)
+    s,r=sf.read(audiofile)
 
     x=np.mean(librosa.feature.mfcc(y=s,sr=r, n_mfcc=40).T,axis=0)
     return x
@@ -138,10 +126,11 @@ mydata = np.zeros(dim)
 # crying class
 for i in range(0,len(baby_cry)):
     data=[]
-    print("read %s..." % baby_cry[i])
-    #mfc=Mfcc(baby_cry[i])
+    print("read %s   ..." % baby_cry[i])
+
     feat = newFeatures(baby_cry[i], True)
     feat1 = np.mean(feat, axis=0)
+
     for j in feat1:
         data.append(j)
     data.append(1)
@@ -152,7 +141,7 @@ for i in range(0,len(baby_cry)):
 all=baby_cry+nonbabycry
 for i in range(len(baby_cry)-1,len(all)-1):
      data=[]
-     print("read %s..." % all[i])
+     print("read %s   ..." % all[i])
      feat = newFeatures(all[i], False)
      feat1 = np.mean(feat, axis=0)
      for j in feat1:
@@ -171,8 +160,8 @@ output=mydata[:,13]
 
 print("start training...")
 mymodel=Sequential()
-mymodel.add(Dense(32, input_dim = 13, init='uniform', activation ='relu'))
-mymodel.add(Dense(16,init='uniform', activation='relu'))
+mymodel.add(Dense(16, input_dim = 13, init='uniform', activation ='relu'))
+mymodel.add(Dense(8,init='uniform', activation='relu'))
 mymodel.add(Dense(1, init='uniform', activation='sigmoid'))
 
 

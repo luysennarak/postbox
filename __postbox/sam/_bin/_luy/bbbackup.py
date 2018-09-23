@@ -26,7 +26,6 @@ from keras.utils import np_utils
 from keras.models import Sequential
 from keras.layers import Dense
 from pyAudioAnalysis import audioFeatureExtraction as aFE
-from pyAudioAnalysis import audioBasicIO as aIO
 
 fs=16000
 #MAX_INT = 32768.0
@@ -109,7 +108,12 @@ def removeNoise(orig_signal, fs):
 
     return filteredSignal
 
-def Loudness(orig_signal):
+def Normalize(orig_signal):
+    DC = orig_signal.mean()
+    MAX = (numpy.abs(orig_signal)).max()
+    signal = (orig_signal - DC) / (MAX + 0.0000000001)
+
+    '''
     max_val1 = numpy.max(orig_signal)
     max_val2 = numpy.min(orig_signal)
     max_val2 = numpy.fabs(max_val2)
@@ -118,7 +122,8 @@ def Loudness(orig_signal):
 
     # normalize
     new_signal = orig_signal * (1.0 / max_val1)
-    return new_signal
+    '''
+    return signal
 
 with open('hmodel.json','r') as f:
     mymodel=model_from_json(f.read())
@@ -126,21 +131,43 @@ with open('hmodel.json','r') as f:
 mymodel.load_weights("hmodelweight.h5")
 
 
-def VAD(frate, signal):
-    return signal
+def testFeatures(inFile):
+    # read audio data from file
+    #[Fs, x] = aIO.readAudioFile(inFile)
+    x, Fs = librosa.load(inFile, sr=16000) #sf.read(inFile)
 
+    x = Normalize(x)
+
+    # window and overlap size
+    win = int(0.5 * Fs)
+    step = int(0.25 * Fs)
+
+    # get short-time features
+    Feats = aFE.stFeatureExtraction(x, Fs, win, step)
+    '''
+    energy = Feats[1]
+    thv = energy.mean() * 0.1
+    i_speechs = np.where(energy > thv)[0]
+    Feats = Feats[:, i_speechs]
+    '''
+
+    # saveFeats(Feats)
+    Feats = np.transpose(Feats[8:21, :])
+
+    newFeat = []
+    for row in range(len(Feats)):
+        newFeat.append(Feats[row, :])
+
+    return newFeat
 
 def newFeatures(Fs, signal):
-
-    # VAD
-    x = VAD(Fs, signal)
 
     # window and overlap size
     win = int(0.025 * Fs)
     step = int(0.010 * Fs)
 
     # get short-time features
-    Feats = aFE.stFeatureExtraction(x, Fs, win, step)
+    Feats = aFE.stFeatureExtraction(signal, Fs, win, step)
 
     # saveFeats(Feats)
     Feats = np.transpose(Feats[8:21, :])
@@ -186,7 +213,7 @@ def doafter5():
 
     #noNoiseSignal = removeNoise(livesignal, fs)
 
-    #livesignal = Loudness(livesignal)
+    #livesignal = Normalize(livesignal)
 
 
     newdata=[]
@@ -216,6 +243,20 @@ def doafter5():
 
     threading.Timer(2.0, doafter5).start()
 
+
+
+def test_file():
+    fe = testFeatures('newsongg5.wav')
+
+    for fr in fe:
+        data = np.reshape(fr, (1, 13))
+        soundclass = int(mymodel.predict_classes(data))
+        print(soundclass, end='')
+
+
+
 if __name__ == '__main__':
     doafter5()
+
+    #test_file()
 
